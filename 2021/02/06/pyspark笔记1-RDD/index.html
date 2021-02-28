@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="spark编程基础(python版)-RDD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pyspark-RDD">
+<meta property="og:url" content="http://example.com/2021/02/06/pyspark%E7%AC%94%E8%AE%B01-RDD/index.html">
+<meta property="og:site_name" content="Dawn Zou&#39;s Blog">
+<meta property="og:description" content="spark编程基础(python版)-RDD">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-06T07:20:17.000Z">
+<meta property="article:modified_time" content="2021-02-06T13:32:00.000Z">
+<meta property="article:author" content="Dawn Zou">
+<meta property="article:tag" content="pyspark">
+<meta property="article:tag" content="RDD">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/02/06/pyspark%E7%AC%94%E8%AE%B01-RDD/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>pyspark-RDD | Dawn Zou's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Dawn Zou's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD"><span class="nav-number">1.</span> <span class="nav-text">RDD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8Bwordcount"><span class="nav-number">2.</span> <span class="nav-text">示例wordcount</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%AE%E5%80%BC%E5%AF%B9RDD"><span class="nav-number">3.</span> <span class="nav-text">键值对RDD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E4%B9%A6%E9%94%80%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">图书销量</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dawn Zou"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Dawn Zou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dawn-Zou" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dawn-Zou" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/06/pyspark%E7%AC%94%E8%AE%B01-RDD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dawn Zou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dawn Zou's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pyspark-RDD
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-02-06 15:20:17 / Modified: 21:32:00" itemprop="dateCreated datePublished" datetime="2021-02-06T15:20:17+08:00">2021-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/notes/" itemprop="url" rel="index"><span itemprop="name">notes</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">spark编程基础(python版)-RDD</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h2><ul>
+<li>转换：<code>filter(func) map(func) flatMap(func) groupByKey() reduceByKey(func)</code></li>
+<li>行动：<code>count() collect() first() take(n) reduce() foreach(func)</code><br>惰性机制</li>
+<li>持久化：持久化后的RDD将会被保留在计算节点的内存被后面的行动重复使用<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">persist</span><span class="params">()</span>标记持久化</span></span><br><span class="line"><span class="function"><span class="title">memory_only</span></span></span><br><span class="line"><span class="function"><span class="title">memory_and_disk</span></span></span><br><span class="line"><span class="function">.<span class="title">cache</span><span class="params">()</span> <span class="title">persist</span><span class="params">(memory_only)</span></span></span><br></pre></td></tr></table></figure></li>
+<li>分块：hdfs </li>
+<li>分区:</li>
+<li><ul>
+<li>并行</li>
+</ul>
+</li>
+<li><ul>
+<li>减少通信开销<br>分区个数 = 集群中cpu核心数目<br>yarn:默认集群中cpu核心数目 和2 的最大值<pre><code> `--conf spark.default.parallelism=400`
+</code></pre>
+设置分区个数<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc.text<span class="constructor">File(<span class="params">path</span>,<span class="params">partitionNum</span>)</span></span><br><span class="line">sc.parallelize(<span class="built_in">list</span>,partitionNum)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><ul>
+<li>写数据库时，减少读写开销，减少分区个数<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">len</span>(<span class="class"><span class="keyword">data</span>.glom().collect())</span></span><br><span class="line"><span class="title">rdd</span> = <span class="class"><span class="keyword">data</span>.repatition(<span class="title">partitionNum</span>)</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><ul>
+<li>HashPartitioner</li>
+</ul>
+</li>
+<li><ul>
+<li>RangePartitioner</li>
+</ul>
+</li>
+<li>自定义分区<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">from</span> pyspark import SparkContext,SparkConf</span><br><span class="line">def MyPartitioner(<span class="meta">key</span>)</span><br><span class="line">	p<span class="meta">rint(</span><span class="string">&quot;My Partitoiner is running&quot;</span>)</span><br><span class="line">	p<span class="meta">rint(</span><span class="string">&quot;The key is %d&quot;</span><span class="name">%key</span>)</span><br><span class="line">	<span class="meta">return</span> <span class="meta">key</span>%10</span><br><span class="line">def ma<span class="meta">in(</span>):</span><br><span class="line">	p<span class="meta">rint(</span><span class="string">&quot;The main function is running&quot;</span>)</span><br><span class="line">	conf = SparkConf().setMaster(<span class="string">&quot;Local&quot;</span>).setAppName(<span class="string">&quot;MyApp&quot;</span>)</span><br><span class="line">	sc = SparkContext(conf = conf)</span><br><span class="line"><span class="keyword">	data </span>=sc.parallelize<span class="meta">(range(</span>10),5)</span><br><span class="line">	data.map(lambda a:(a,1))\</span><br><span class="line">	.partitionBy(10,MyPartitioner)</span><br></pre></td></tr></table></figure>
+一个分区会启动一个线程<h2 id="示例wordcount"><a href="#示例wordcount" class="headerlink" title="示例wordcount"></a>示例wordcount</h2><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">line = sc.text<span class="constructor">File(<span class="string">&quot;file:///usr/local/spark/mycode/rdd/word.txt&quot;</span>)</span></span><br><span class="line">wordCount = line.flat<span class="constructor">Map(<span class="params">lambda</span> <span class="params">line</span>:<span class="params">line</span>.<span class="params">split</span>(<span class="string">&quot; &quot;</span>)</span>.\</span><br><span class="line">map(lambda word:(word,<span class="number">1</span>)).reduce<span class="constructor">ByKey(<span class="params">lambda</span> <span class="params">a</span>,<span class="params">b</span>:<span class="params">a</span>+<span class="params">b</span>)</span></span><br><span class="line">print(wordCount.collect<span class="literal">()</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="键值对RDD"><a href="#键值对RDD" class="headerlink" title="键值对RDD"></a>键值对RDD</h2></li>
+<li>reduceByKey：使用func合并具有相同键的值</li>
+<li>groupByKey:对具有相同的值进行分组 <code>&lt;pyspark.resultiterable.ResultIterable object at .....&gt;</code></li>
+<li>用两者分别进行wordcount<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wordPairsRDD = sc.parallelize(words).map(lambda word:(word,<span class="number">1</span>))</span><br><span class="line">wordCountsWithReduce = wordPairsRDD.reduce<span class="constructor">ByKey(<span class="params">lambda</span> <span class="params">a</span>,<span class="params">b</span>:<span class="params">a</span>+<span class="params">b</span>)</span></span><br><span class="line">wordCountsWithGroup = wordPairsRDD.group<span class="constructor">ByKey()</span>.map(t: (t<span class="literal">[<span class="number">0</span>]</span>,sum(t<span class="literal">[<span class="number">1</span>]</span>)))</span><br></pre></td></tr></table></figure></li>
+<li>常见操作<br><code>keys,values,sortBykey,mapValues,join</code></li>
+</ul>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pairRDD.sortBykey.foreach(print)</span><br><span class="line">pairRDD.map<span class="constructor">Values(<span class="params">lambda</span> <span class="params">x</span>:<span class="params">x</span>+1)</span></span><br><span class="line">pairRDD3 = pairRDD1.join(pairRDD2)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>sortBykey和sortBy区别<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d1.reduce<span class="constructor">ByKey(<span class="params">lambda</span> <span class="params">a</span>,<span class="params">b</span>:<span class="params">a</span>+<span class="params">b</span>)</span>.sort<span class="constructor">Bykey(False)</span>.collect<span class="literal">()</span></span><br><span class="line">d1.reduce<span class="constructor">ByKey(<span class="params">lambda</span> <span class="params">a</span>,<span class="params">b</span>:<span class="params">a</span>+<span class="params">b</span>)</span>.sort<span class="constructor">By(<span class="params">lambda</span> <span class="params">x</span>:<span class="params">x</span>,False)</span>.collect<span class="literal">()</span></span><br><span class="line">d1.reduce<span class="constructor">ByKey(<span class="params">lambda</span> <span class="params">a</span>,<span class="params">b</span>:<span class="params">a</span>+<span class="params">b</span>)</span>.sort<span class="constructor">By(<span class="params">lambda</span> <span class="params">x</span>:<span class="params">x</span>[0],False)</span>.collect<span class="literal">()</span></span><br><span class="line">d1.reduce<span class="constructor">ByKey(<span class="params">lambda</span> <span class="params">a</span>,<span class="params">b</span>:<span class="params">a</span>+<span class="params">b</span>)</span>.sort<span class="constructor">By(<span class="params">lambda</span> <span class="params">x</span>:<span class="params">x</span>[1],False)</span>.collect<span class="literal">()</span></span><br></pre></td></tr></table></figure>
+<h2 id="图书销量"><a href="#图书销量" class="headerlink" title="图书销量"></a>图书销量</h2><pre><code class="python">rdd = sc.parallelize([(&quot;spark&quot;,2),(&quot;hadoop&quot;,6),(&quot;spark&quot;,6),(&quot;hadoop&quot;,4)])
+rdd.mapValues(lambda x:(x,1)).\
+reduceByKey(lambda x,y :(x[0]+y[0],x[1]+y[1])).\
+mapValues(lambda x:x[0]/x[1]).collect()
+</code></pre>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pyspark/" rel="tag"># pyspark</a>
+              <a href="/tags/RDD/" rel="tag"># RDD</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/06/pyspark%E7%AC%94%E8%AE%B02%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%86%99/" rel="next" title="pyspark-文件数据读写及案例">
+                  pyspark-文件数据读写及案例 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dawn Zou</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</body>
+</html>

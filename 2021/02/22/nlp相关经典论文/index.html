@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="nlp相关经典论文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nlp相关经典论文">
+<meta property="og:url" content="http://example.com/2021/02/22/nlp%E7%9B%B8%E5%85%B3%E7%BB%8F%E5%85%B8%E8%AE%BA%E6%96%87/index.html">
+<meta property="og:site_name" content="Dawn Zou&#39;s Blog">
+<meta property="og:description" content="nlp相关经典论文">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-22T06:59:28.000Z">
+<meta property="article:modified_time" content="2021-02-22T07:33:00.000Z">
+<meta property="article:author" content="Dawn Zou">
+<meta property="article:tag" content="nlp">
+<meta property="article:tag" content="论文">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/02/22/nlp%E7%9B%B8%E5%85%B3%E7%BB%8F%E5%85%B8%E8%AE%BA%E6%96%87/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>nlp相关经典论文 | Dawn Zou's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Dawn Zou's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#attention-is-all-you-need"><span class="nav-number">1.</span> <span class="nav-text">attention is all you need</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">序列模型简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN"><span class="nav-number">1.1.1.</span> <span class="nav-text">RNN :</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN-Neural-GPU-ByteNet-ConvS2S"><span class="nav-number">1.1.2.</span> <span class="nav-text">CNN: Neural GPU; ByteNet; ConvS2S</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNNs-With-Attention"><span class="nav-number">1.1.3.</span> <span class="nav-text">RNNs With Attention</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer"><span class="nav-number">1.2.</span> <span class="nav-text">Transformer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Convolution-Neural-Networks-for-Sentence-Classification"><span class="nav-number">2.</span> <span class="nav-text">Convolution Neural Networks for Sentence Classification</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-Representation"><span class="nav-number">2.1.</span> <span class="nav-text">Text Representation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF"><span class="nav-number">2.2.</span> <span class="nav-text">卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">2.3.</span> <span class="nav-text">模型结构：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#related-paper"><span class="nav-number">2.4.</span> <span class="nav-text">related paper</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Glove-Gloval-Vectors-for-Word-Representation"><span class="nav-number">3.</span> <span class="nav-text">Glove:Gloval Vectors for Word Representation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD-NMF-CCA"><span class="nav-number">3.1.</span> <span class="nav-text">SVD\NMF\CCA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E8%AF%8D%E8%A1%A8%E7%A4%BA"><span class="nav-number">3.2.</span> <span class="nav-text">基于神经网络的词表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#word2vec"><span class="nav-number">3.2.1.</span> <span class="nav-text">word2vec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Glove-%E5%8F%96%E9%95%BF%E8%A1%A5%E7%9F%AD%EF%BC%8C%E7%BB%93%E5%90%88%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95%E7%9A%84%E4%BC%98%E7%82%B9%E5%AD%A6%E4%B9%A0%E8%AF%8D%E8%A1%A8%E7%A4%BA"><span class="nav-number">3.2.2.</span> <span class="nav-text">Glove:取长补短，结合两种方法的优点学习词表示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Skip-Thought-Vector"><span class="nav-number">4.</span> <span class="nav-text">Skip-Thought Vector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.1.</span> <span class="nav-text">基于词袋模型的句表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%8F%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.2.</span> <span class="nav-text">基于神经网络的句表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.2.1.</span> <span class="nav-text">基于语言模型的句表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%A4%8D%E8%BF%B0%E5%8F%A5%E5%8C%B9%E9%85%8D%E7%9A%84%E5%8F%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.2.2.</span> <span class="nav-text">基于复述句匹配的句表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%B3%E8%B7%83%E6%80%9D%E7%BB%B4%E5%8F%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.2.3.</span> <span class="nav-text">跳跃思维句表示</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dawn Zou"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Dawn Zou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dawn-Zou" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dawn-Zou" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/22/nlp%E7%9B%B8%E5%85%B3%E7%BB%8F%E5%85%B8%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dawn Zou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dawn Zou's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nlp相关经典论文
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-02-22 14:59:28 / Modified: 15:33:00" itemprop="dateCreated datePublished" datetime="2021-02-22T14:59:28+08:00">2021-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/notes/" itemprop="url" rel="index"><span itemprop="name">notes</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">nlp相关经典论文</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="attention-is-all-you-need"><a href="#attention-is-all-you-need" class="headerlink" title="attention is all you need"></a>attention is all you need</h1><h2 id="序列模型简介"><a href="#序列模型简介" class="headerlink" title="序列模型简介"></a>序列模型简介</h2><h3 id="RNN"><a href="#RNN" class="headerlink" title="RNN :"></a>RNN :</h3><ol>
+<li>Sequential computations inhibits parallelization </li>
+<li>No explicit modeling of long and short range dependencies </li>
+<li>Transmitting local and global information through one bottleneck<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28054589">https://zhuanlan.zhihu.com/p/28054589</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/47063917">https://zhuanlan.zhihu.com/p/47063917</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/47282410">https://zhuanlan.zhihu.com/p/47282410</a></p>
+</blockquote>
+</li>
+</ol>
+<h3 id="CNN-Neural-GPU-ByteNet-ConvS2S"><a href="#CNN-Neural-GPU-ByteNet-ConvS2S" class="headerlink" title="CNN: Neural GPU; ByteNet; ConvS2S"></a>CNN: Neural GPU; ByteNet; ConvS2S</h3><ol>
+<li>Trivial to parallelize </li>
+<li>Exploits local dependencies</li>
+<li>interaction distance between positions linear or logarithmic</li>
+<li>long-distance dependencies require many layers<br>Encoder-Decoder Stacking<br>Dynamic Unfolding<br>Input Embedding Tensor<br>Masked One-dimensional Convolutions<br>Dilation<br>Residual Blocks</li>
+</ol>
+<h3 id="RNNs-With-Attention"><a href="#RNNs-With-Attention" class="headerlink" title="RNNs With Attention"></a>RNNs With Attention</h3><ol>
+<li>Removes bottleneck of Encoder-Decoder Model</li>
+<li>Provides context for given decoder step<br>Use “query” vector(decoder state) and “key” vector(all encoder states)<br>For each query-key pair,calculate weight<br>Normalize to add to one using softmax</li>
+</ol>
+<h2 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h2><p>Encoder: 6 identical layers<br>Layer:</p>
+<ol>
+<li>multi-head self-attention</li>
+<li>fully connected feed-forward<br>Residual Connections:<br>LayerNorm(x+Sublayer(x))</li>
+</ol>
+<p>Decoder: 6 identical layers<br>Layer:</p>
+<ol>
+<li>masked multi-head self-attention</li>
+<li>multi-head self-attention</li>
+<li>fully connected feed-forward<br>Residual Connections:<br>LayerNorm(x+Sublayer(x))</li>
+</ol>
+<p>注意力机制</p>
+<ol>
+<li><p>Function mapping a query and a set of key-values pairs to output each weight</p>
+</li>
+<li><p>Weighted sum of the values<br>scaled dot-product attention<br>$A(Q,V,K)=softmax(\frac{QK^{T}}{ \sqrt{d_{k}} })V$</p>
+<p>attention and self-attention<br>attention :query来自外部序列<br>$h_{i}= attention((k,v),q_{i})<br>= \sum_{j=1}^{N}a_{ij}v_{j}<br>= \sum_{j=1}^{N}softmax(s(k_{j},q_{i}))v_{j}$</p>
+</li>
+</ol>
+<p>self-attention:query来自于原本的序列<br>$H=softmax(\frac{QK^{T}}{ \sqrt{d_{k}} })V$</p>
+<p>自注意力机制与卷积网络的对比<br>self-attention:variable-sized perceptive field,multi-head(parrallel attention heads)<br>convolution:local dependency,multi-channel</p>
+<p>feed-forward network<br>$FFN(x)=max(0,xW_{1}+b_{1})W_{2}+b_{2}$<br>increase non-linear property</p>
+<p>Positional Encoding</p>
+<ol>
+<li>Positional encoding provides relative or absolute position of given token</li>
+<li>Many options to select positional encoding,in this work<br>$PE(pos,2i) = sin(\frac{pos}{10000^{2i/d}model})$<br>$PE(pos,2i+1) = cos(\frac{pos}{10000^{2i/d}model})$</li>
+</ol>
+<p>why residual connections<br>Residuals carry positional information to higher layer,among other information</p>
+<p>Training </p>
+<ol>
+<li>ADAM optimizer with a learning rate warmup ()</li>
+<li>Dropout during training at every layer just before adding residual </li>
+<li>Layer-Normalization(help ensure that layer remain in reasonable range)</li>
+<li>Attention dropout (for some experiments)</li>
+<li>Checkoutpoint -averaging</li>
+<li>Label smoothing(insert some uncertainty in the training process)</li>
+<li>Auto-regressive decoding with beam search and length biasing</li>
+</ol>
+<p>conclusion:<br>新的序列模型：完全基于注意力<br>在标准的WMT翻译数据集上达到了state-of-the-art的结果<br>模型很快：并行的矩阵乘法</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://nlp.seas.harvard.edu/2018/04/03/attention.html">http://nlp.seas.harvard.edu/2018/04/03/attention.html</a><br><a target="_blank" rel="noopener" href="http://jalammar.github.io/illustrated-transformer/">http://jalammar.github.io/illustrated-transformer/</a></p>
+</blockquote>
+<p>代码实现<br>pytorch <a target="_blank" rel="noopener" href="https://github.com/jadore801120/attention-is-all-you-need-pytorch">https://github.com/jadore801120/attention-is-all-you-need-pytorch</a><br>模型整体框架：<br>编码器解码器<br>输入输出词嵌入<br>生成器<br>编码序列<br>解码序列<br>编解码的mask</p>
+<details>
+ <summary> 代码实现</summary>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pytorch dynamic graph</span><br><span class="line"><span class="comment"># 克隆多层</span></span><br><span class="line">copy.deepcopy(module)</span><br><span class="line">LayerNorm: layernormalization</span><br><span class="line">dropout </span><br><span class="line">sublayerConnection</span><br><span class="line">torch.triu</span><br><span class="line">torch.matmul(auery,key.transpose(-<span class="number">2</span>,-<span class="number">1</span>))/math.sqrt(d_k)</span><br><span class="line">.view</span><br></pre></td></tr></table></figure>
+</details> 
+
+<h1 id="Convolution-Neural-Networks-for-Sentence-Classification"><a href="#Convolution-Neural-Networks-for-Sentence-Classification" class="headerlink" title="Convolution Neural Networks for Sentence Classification"></a>Convolution Neural Networks for Sentence Classification</h1><h2 id="Text-Representation"><a href="#Text-Representation" class="headerlink" title="Text Representation"></a>Text Representation</h2><p>词袋，词嵌入</p>
+<ol>
+<li>基于规则</li>
+<li>基于特征：tf-idf加权求和得到文本表示，训练分类器进行文本分类</li>
+<li>基于神经网络<br>分词，句子中的单词转化为低维的词表示，使用编码器得到句子表示，最终得到类别</li>
+</ol>
+<h2 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h2><p>池化：降采样，降低特征维度并保留有效信息</p>
+<ol>
+<li>减少模型参数，避免过拟合，提高训练速度</li>
+<li>保持特征的位旋转、伸缩不变性(CV)</li>
+<li>将变长的输入转换为固定长度(NLP)</li>
+</ol>
+<h2 id="模型结构："><a href="#模型结构：" class="headerlink" title="模型结构："></a>模型结构：</h2><ol>
+<li>输入层：</li>
+<li>卷积层：<br>上述公式表示使用窗口大小为h的滤波器<br>得到特征图<br>$c_{i}=f(w\cdot x_{i:i+h-1}+b)$<br>$c=[c_{1},c_{2},\cdots ,c_{n-h+1}]$<br>使用多个滤波器来捕获多种特征</li>
+<li>全连接层<br>$y = w\cdot z+b$<br>将句子向量转化为一个维度和类别数相同的向量<br>随机失活<br>$y = w\cdot (z\circ r)+b$<br>r是失活向量，以一定概率取值为1，否则为0</li>
+</ol>
+<h2 id="related-paper"><a href="#related-paper" class="headerlink" title="related paper"></a>related paper</h2><p>A Sensitivity Analysis of (and Practitioners’ Guide to)<br>Convolutional Neural Networks for Sentence Classification</p>
+<details>
+ <summary> TextCNN</summary>
+词向量分别使用预训练固定、预训练微调和随机初始化三种方案
+https://github.com/yoonkim/CNN_sentence
+https://github.com/galsang/CNN-sentence-classification-pytorch
+http://code.google.com/archive/p/word2vec/
+https://github.com/AcademiaSinicaNLPLab/sentiment_dataset
+
+<p>数据目录<br>模型存储目录<br>模型文件：模型初始化<br>程序入口文件：加载词向量，处理UNK和PAD<br>工具文件：数据预处理</p>
+<p>交叉熵损失，不需要再在输出softmax<br>根据验证集来选择模型<br>early_stopping :如果准确率在验证集上有下降</p>
+<p>LSTM,GRU做文本分类<br><a target="_blank" rel="noopener" href="http://github.com/bamtercelboo/cnn-lstm-bilstm-deepcnn-clstm-in-pytorch">http://github.com/bamtercelboo/cnn-lstm-bilstm-deepcnn-clstm-in-pytorch</a> </p>
+</details> 
+
+
+
+
+
+<h1 id="Glove-Gloval-Vectors-for-Word-Representation"><a href="#Glove-Gloval-Vectors-for-Word-Representation" class="headerlink" title="Glove:Gloval Vectors for Word Representation"></a>Glove:Gloval Vectors for Word Representation</h1><p>基于共现矩阵的词表示<br>词共现矩阵</p>
+<h2 id="SVD-NMF-CCA"><a href="#SVD-NMF-CCA" class="headerlink" title="SVD\NMF\CCA"></a>SVD\NMF\CCA</h2><p>SVD-&gt;降噪、降维<br>$X=USV^{T}$<br>S除了对角线，其它位置都是0，从U中取前k列作为词向量</p>
+<ol>
+<li>语义相近的词在向量空间相近，可以一定程度反映word间的线性关系</li>
+<li>矩阵维度经常变动，比如新词频繁加入</li>
+<li>绝大部分词不会共现，矩阵过于稀疏</li>
+<li>矩阵维度很高</li>
+<li>训练时复杂度$O(|v|^{3})$</li>
+</ol>
+<h2 id="基于神经网络的词表示"><a href="#基于神经网络的词表示" class="headerlink" title="基于神经网络的词表示"></a>基于神经网络的词表示</h2><h3 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h3><p>CBOW(Continuous Bag-of-Words Model)<br>Skip-gram (Continuous Skip-gram Model)<br>$L=-\frac{1}{T}\sum_{t=1}^{T}\sum_{-m\leqslant j\leqslant m,j\neq 0}^{}logp(w_{t+j}|w_{t})$<br>$p(w_{t+j}|w_{t})=\frac{exp(v_{w_{t}}^{T}v_{w_{t+j}})}{\sum_{i=1}^{|V|}exp(v_{w_{t}}^{T}v_{w_{i}})}$<br>效果较好、速度快<br>没有充分利用全局统计信息、过度重视共现词频高的单词对</p>
+<h3 id="Glove-取长补短，结合两种方法的优点学习词表示"><a href="#Glove-取长补短，结合两种方法的优点学习词表示" class="headerlink" title="Glove:取长补短，结合两种方法的优点学习词表示"></a>Glove:取长补短，结合两种方法的优点学习词表示</h3><p>motivation<br>建模$Ratio = \frac{P_{ik}}{P_{jk}}$,而不是$P_{ik}$<br>$F(w_{i},w_{j},w_{k})=\frac{P_{ik}}{P_{jk}}$<br>测试<br>word analogies<br>word similarity<br>ner<br>和skip-gram的联系</p>
+<ol>
+<li>提出一种新的词表示方法<br>考虑全局信息，理论可解释</li>
+<li>加入了一种权重函数来衡量高频词</li>
+<li>对后续工作有很大启发</li>
+</ol>
+<h1 id="Skip-Thought-Vector"><a href="#Skip-Thought-Vector" class="headerlink" title="Skip-Thought Vector"></a>Skip-Thought Vector</h1><p>跳跃思维句表示<br>句表示<br>一次表示，多领域应用<br>预先训练，应用微调</p>
+<p>趋势：让句子的语义更准确编码到有限维的向量中<br>在向量子空间中保持句子的语义关系<br>更好地利用语言模型以及无监督上下文信息</p>
+<h2 id="基于词袋模型的句表示"><a href="#基于词袋模型的句表示" class="headerlink" title="基于词袋模型的句表示"></a>基于词袋模型的句表示</h2><p>one-hot,<br>词向量加权：tf-idf，SIF<br>基于上下文、有监督、无监督的句表示<br>基于上下文、语言模型、无监督的句表示</p>
+<h2 id="基于神经网络的句表示"><a href="#基于神经网络的句表示" class="headerlink" title="基于神经网络的句表示"></a>基于神经网络的句表示</h2><h3 id="基于语言模型的句表示"><a href="#基于语言模型的句表示" class="headerlink" title="基于语言模型的句表示"></a>基于语言模型的句表示</h3><ol>
+<li>利用无监督预料，成本低，语言模型学习语言知识</li>
+<li>忽略句子之间隐藏的语义联系<h3 id="基于复述句匹配的句表示"><a href="#基于复述句匹配的句表示" class="headerlink" title="基于复述句匹配的句表示"></a>基于复述句匹配的句表示</h3></li>
+<li>建模了句对之间的相似与不相似关系</li>
+<li>仅仅建模了相关性，忽略了句子间复杂的语义关系<h3 id="跳跃思维句表示"><a href="#跳跃思维句表示" class="headerlink" title="跳跃思维句表示"></a>跳跃思维句表示</h3>在一段话，能否通过一个句子预测出他上下文的句子？</li>
+</ol>
+<p>测试<br>语义相似性度量<br>复述句检测<br>句子分类</p>
+<p>创新点</p>
+<ol>
+<li>提出一种新的句表示方法</li>
+<li>证明了依次训练多次使用的可行性</li>
+<li>对后续工作有很大启发</li>
+</ol>
+<p>后续改进<br>Quick Thought:根据一句话的语义，通过分类器找到几句话中真正的上下文句</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sanyam5/skip-thoughts">https://github.com/sanyam5/skip-thoughts</a></p>
+<details>
+ <summary> Skip-Thought Vector</summary>
+推荐adam
+last_best_loss :连续几轮都下降，保存停止  细看
+之后用sgd进一步调参
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">	        <span class="comment"># mask the predictions, so that loss for beyond-EOS word predictions is cancelled.</span></span><br><span class="line">        prev_mask = self.create_mask(prev_pred, lengths[:-<span class="number">1</span>])</span><br><span class="line">        next_mask = self.create_mask(next_pred, lengths[<span class="number">1</span>:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.prev_lstm = nn.LSTM(Encoder.thought_size + self.word_size, self.word_size)</span><br><span class="line">        self.next_lstm = nn.LSTM(Encoder.thought_size + self.word_size, self.word_size)</span><br><span class="line">        self.worder = nn.Linear(self.word_size, VOCAB_SIZE)</span><br><span class="line"></span><br><span class="line">transpose(<span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">view</span><br></pre></td></tr></table></figure>
+</details> 
+后续考虑看
+改成quickthought            
+>https://yknzhu.wixsite.com/mbweb
+Doc2vec及有监督句表示
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nlp/" rel="tag"># nlp</a>
+              <a href="/tags/%E8%AE%BA%E6%96%87/" rel="tag"># 论文</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/20/Lookalike-%E4%B8%8E-PU-learning/" rel="prev" title="Lookalike 与 PU-learning">
+                  <i class="fa fa-chevron-left"></i> Lookalike 与 PU-learning
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/23/presto%E5%8D%B3%E6%97%B6%E6%9F%A5%E8%AF%A2/" rel="next" title="presto即时查询">
+                  presto即时查询 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dawn Zou</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</body>
+</html>

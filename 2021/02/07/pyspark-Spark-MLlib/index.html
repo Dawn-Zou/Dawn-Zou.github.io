@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="spark编程基础(python版)- Spark MLlib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pyspark - Spark MLlib">
+<meta property="og:url" content="http://example.com/2021/02/07/pyspark-Spark-MLlib/index.html">
+<meta property="og:site_name" content="Dawn Zou&#39;s Blog">
+<meta property="og:description" content="spark编程基础(python版)- Spark MLlib">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-07T06:51:05.000Z">
+<meta property="article:modified_time" content="2021-02-07T07:32:00.000Z">
+<meta property="article:author" content="Dawn Zou">
+<meta property="article:tag" content="pyspark">
+<meta property="article:tag" content="MLlib">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/02/07/pyspark-Spark-MLlib/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>pyspark - Spark MLlib | Dawn Zou's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Dawn Zou's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-MLlib-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">Spark MLlib 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text">机器学习流水线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E6%8A%BD%E5%8F%96%E3%80%81%E8%BD%AC%E5%8C%96%E5%92%8C%E9%80%89%E6%8B%A9"><span class="nav-number">3.</span> <span class="nav-text">特征抽取、转化和选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E4%B8%8E%E5%9B%9E%E5%BD%92"><span class="nav-number">4.</span> <span class="nav-text">分类与回归</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dawn Zou"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Dawn Zou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dawn-Zou" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dawn-Zou" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/07/pyspark-Spark-MLlib/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dawn Zou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dawn Zou's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pyspark - Spark MLlib
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-02-07 14:51:05 / Modified: 15:32:00" itemprop="dateCreated datePublished" datetime="2021-02-07T14:51:05+08:00">2021-02-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/notes/" itemprop="url" rel="index"><span itemprop="name">notes</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">spark编程基础(python版)- Spark MLlib</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Spark-MLlib-简介"><a href="#Spark-MLlib-简介" class="headerlink" title="Spark MLlib 简介"></a>Spark MLlib 简介</h2><ul>
+<li>使用MapReduce对机器学习的算法进行编写： 反复读写磁盘开销，磁盘IO开销比较大</li>
+<li>Spark适合大量迭代计算</li>
+<li>MLlib只包含能够在集群上运行良好的并行算法<br>算法工具：分类，回归，聚类，协同过滤<br>特征化工具：特征提取，转化，降维，选择工具<br>流水线：构建、评估、调整机器学习工作流<br>持久性：保存算法，加载算法，模型，管道</li>
+<li>Spark.mllib 基于RDD的数据抽象</li>
+<li>Spark.ml 基于DataFrame的数据抽象</li>
+</ul>
+<h2 id="机器学习流水线"><a href="#机器学习流水线" class="headerlink" title="机器学习流水线"></a>机器学习流水线</h2><p>DataFrame<br>Transformer:通过附加一个或多个列将一个DataFrame转换为另一个DataFrame<br>Estimator:学习算法或在训练数据上的训练方法的概念抽象。被用来操作DataFrame并生成Transformer<br>Pipeline:将多个工作流阶段连接到一起形成机器学习工作流并获得输出结果(PipelineStage:Transformer,Estimator)<br><code>pipeline = Pipeline(stages = [stage1,stage2,stage3])</code><br>流水线本身也可以看作估计器。在流水线的fit()方法运行后，它产生一个PipelineModel,是一个Transformer</p>
+<ul>
+<li><p>LogisticRegression</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.sql <span class="built_in">import</span> SparkSession</span><br><span class="line"><span class="attr">spark</span> = SparkSession.builder.master(<span class="string">&quot;local&quot;</span>).appName(<span class="string">&quot;WordCount&quot;</span>).getOrCreate()</span><br><span class="line"></span><br><span class="line">from pyspark.ml <span class="built_in">import</span> Pipeline</span><br><span class="line">from pyspark.ml.classification <span class="built_in">import</span> LogisticRegression</span><br><span class="line">from pyspark.ml.feature <span class="built_in">import</span> HashingTF,Tokenizer</span><br><span class="line"></span><br><span class="line"><span class="attr">training</span> = spark.createDataFrame([(<span class="number">0</span>,<span class="string">&quot;a b c d e spark&quot;</span>,<span class="number">1.0</span>),(<span class="number">1</span>,<span class="string">&quot;b c&quot;</span>,<span class="number">0.0</span>),(<span class="number">2</span>,<span class="string">&quot;spark f g h&quot;</span>,<span class="number">1.0</span>),(<span class="number">3</span>,<span class="string">&quot;&quot;</span>,<span class="number">0.0</span>)],[<span class="string">&quot;id&quot;</span>,<span class="string">&quot;text&quot;</span>,<span class="string">&quot;label&quot;</span>])</span><br><span class="line"><span class="attr">tokenizer</span> = Tokenizer(<span class="attr">inputCol</span> = <span class="string">&quot;text&quot;</span>,<span class="attr">outputCol</span> = <span class="string">&quot;words&quot;</span>)</span><br><span class="line"><span class="attr">hashingTF</span> = HashingTF(<span class="attr">inputCol</span> = tokenizer.getOutoutCol(),<span class="attr">outputCol</span> = <span class="string">&quot;features&quot;</span>)</span><br><span class="line"><span class="attr">lr</span> = LogisticRegression(<span class="attr">maxIter</span> = <span class="number">10</span>,<span class="attr">reParam</span> = <span class="number">0.001</span>)</span><br><span class="line"><span class="attr">pipeline</span> = Pipeline(<span class="attr">stages</span> = [tokenizer,hashingTF,lr]</span><br><span class="line"><span class="attr">model</span> = pipeline.fit(training)</span><br><span class="line"><span class="attr">training</span> = spark.createDataFrame([(<span class="number">4</span>,<span class="string">&quot;spark i j k&quot;</span> ),(<span class="number">5</span>,<span class="string">&quot;l m n&quot;</span>),(<span class="number">6</span>,<span class="string">&quot;spark hadoop spark&quot;</span>),(<span class="number">7</span>,<span class="string">&quot;apache hadoop&quot;</span>)],[<span class="string">&quot;id&quot;</span>,<span class="string">&quot;text&quot;</span> ])</span><br><span class="line"><span class="attr">prediction</span> = model.transform(text)</span><br><span class="line"><span class="attr">selected</span> = predicition.select(<span class="string">&quot;id&quot;</span>,<span class="string">&quot;text&quot;</span>,<span class="string">&quot;probability&quot;</span>,<span class="string">&quot;prediction&quot;</span>)</span><br><span class="line">for row <span class="keyword">in</span> selected.collect():</span><br><span class="line">	rid,text,prob,<span class="attr">prediction</span> = row </span><br><span class="line">	print(<span class="string">&quot;(%d,%s)--&gt;prob=%s,prediction=%f&quot;</span> %(rid,text,str(probability),predicition))</span><br></pre></td></tr></table></figure>
+<h2 id="特征抽取、转化和选择"><a href="#特征抽取、转化和选择" class="headerlink" title="特征抽取、转化和选择"></a>特征抽取、转化和选择</h2></li>
+<li><p>特征抽取 TF-IDF<br>$IDF(t,D)=log\frac{\left |  D\right |+1}{DF(t,D)+1}$<br>$TFIDF(t,d,D)=TF(t,d)IDF(t,D)$</p>
+<p>HashingTF是transform<br>IDF是</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature <span class="keyword">import</span> HashinTF,IDF,Tokenizer</span><br><span class="line">sentenceData = spark.createDataFrame([(<span class="number">0</span>,&quot;I heard about Spark and I love Spark&quot;),(<span class="number">0</span>,&quot;I wish Java could use case classes&quot;),(<span class="number">1</span>,&quot;LogisticRegression models are neat&quot;)]).toDF(&quot;label&quot;,&quot;setence&quot;)</span><br><span class="line">tokenizer = Tokenizer(inputCol=&quot;setence&quot;,outputCol=&quot;words&quot;)</span><br><span class="line">wordsData = tokenizer.<span class="keyword">transform</span>(setenceData)</span><br><span class="line">wordsData.<span class="keyword">show</span>()</span><br><span class="line"># 设置哈希表的桶数<span class="number">2000</span></span><br><span class="line">hashingTF = HashinTF(inputCol=&quot;words&quot;,outputCol=&quot;rawFeatures&quot;,numFeatures=<span class="number">2000</span>)</span><br><span class="line"># 使用HashingTF的<span class="keyword">transform</span>()方法把句子哈希成特征向量</span><br><span class="line">featurizedData = hashingTF.<span class="keyword">transform</span>(wordsData)</span><br><span class="line">featurizedData.<span class="keyword">select</span>(&quot;words&quot;,&quot;rawFeatures&quot;).<span class="keyword">show</span>(<span class="keyword">truncate</span>=<span class="keyword">False</span>)</span><br><span class="line"># 使用IDF对单纯的词频特征向量进行构造</span><br><span class="line">idf =IDF(inputCol =&quot;rawFeatures&quot;,outputCol=&quot;features&quot;)</span><br><span class="line">idfModel = idf.fit(featurizedData)</span><br><span class="line"># 调用IDFModel的<span class="keyword">transform</span>()方法来调权重</span><br><span class="line">recaledData = idfModel.<span class="keyword">transform</span>(featurizedData)</span><br><span class="line">recaledData.<span class="keyword">select</span>(&quot;feature&quot;,&quot;label&quot;).<span class="keyword">show</span>(<span class="keyword">truncate</span>=Fales)</span><br></pre></td></tr></table></figure></li>
+<li><p>特征转换：标签和索引的转化<br>把标签数据转化为整数索引<br>计算之后把索引还原成标签</p>
+</li>
+<li><p>StringIndexer :StringIndexer转换器把类别型的特征数值化，索引从0(频率最高)开始；输入时数值型先转化为字符型，再编码</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">from</span> pyspark.ml.feature import StringIndexer</span><br><span class="line"><span class="attribute">df</span> = spark.createDataFrame([(<span class="number">0</span>,<span class="string">&quot;a&quot;</span>),(<span class="number">1</span>,<span class="string">&quot;b&quot;</span>),(<span class="number">2</span>,<span class="string">&quot;c&quot;</span>),(<span class="number">3</span>,<span class="string">&quot;d&quot;</span>),(<span class="number">4</span>,<span class="string">&quot;a&quot;</span>),(<span class="number">5</span>,<span class="string">&quot;c&quot;</span>)],[<span class="string">&quot;id&quot;</span>,<span class="string">&quot;category&quot;</span>])</span><br><span class="line"><span class="attribute">indexer</span> = StringIndexer(inputCol = <span class="string">&quot;category&quot;</span>,outputCol=<span class="string">&quot;categoryIndex&quot;</span>)</span><br><span class="line"><span class="attribute">model</span> = indexer.fit(df)</span><br><span class="line"><span class="attribute">indexed</span> = model.transform(df)</span><br><span class="line"><span class="attribute">indexed</span>.show()</span><br></pre></td></tr></table></figure></li>
+<li><p>IndexToString ：与StringIndexer相对应</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature <span class="keyword">import</span> IndexToString,StringIndexer</span><br><span class="line">toString = IndexToString(inputCol=&quot;categoryIndex&quot;,outputCol=&quot;originalCategory&quot;)</span><br><span class="line">indexString = toString.<span class="keyword">transform</span>(indexed)</span><br><span class="line">indexString.<span class="keyword">select</span>(&quot;id&quot;,&quot;originalCategory&quot;).<span class="keyword">show</span>()</span><br></pre></td></tr></table></figure></li>
+<li><p>VectorIndexer :所有特征都已经被组织在一个向量中，又想对其中某些单个分量进行处理<br>maxCategories自动识别类别型特征</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature <span class="keyword">import</span> VectorIndexer</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.linalg <span class="keyword">import</span> Vector,Vectors</span><br><span class="line">df = spark.createDataFrame([<span class="string">\</span></span><br><span class="line">(Vectors.dense(-<span class="number">1.0</span>,<span class="number">1.0</span>,<span class="number">1.0</span>),),<span class="string">\</span></span><br><span class="line">(Vectors.dense(-<span class="number">1.0</span>,<span class="number">3.0</span>,<span class="number">1.0</span>),),<span class="string">\</span></span><br><span class="line">(Vectors.dense(<span class="number">0.0</span>,<span class="number">5.0</span>,<span class="number">1.0</span>),)],[<span class="string">&quot;features&quot;</span>])</span><br><span class="line"><span class="comment">#构建VectorIndexer转换器</span></span><br><span class="line">indexer = VectorIndexer(inputCol=<span class="string">&quot;features&quot;</span>,outputCol=<span class="string">&quot;indexed&quot;</span>,maxCategories=<span class="number">2</span>)</span><br><span class="line">indexerModel = indexer.fit(df)</span><br><span class="line"><span class="comment"># 通过categoriesMaps成员来获得被转换的特征及其映射</span></span><br><span class="line">categoriesFeatures = indexerModel.categoryMaps.keys()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Choose&quot;</span>+str(len(categoriesFeatures))+<span class="string">\</span></span><br><span class="line"><span class="string">&quot;categories features:&quot;</span>+str(categoriesFeatures))</span><br><span class="line">indexed = indexerModel.transform(df)</span><br><span class="line">indexed.show()</span><br></pre></td></tr></table></figure>
+<h2 id="分类与回归"><a href="#分类与回归" class="headerlink" title="分类与回归"></a>分类与回归</h2></li>
+<li><p>logistic regression</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.ml.linalg <span class="keyword">import</span> Vector,Vectors</span><br><span class="line">from pyspark.sql <span class="keyword">import</span> Row,functions</span><br><span class="line">from pyspark.ml.evaluation <span class="keyword">import</span> MulticlassClassificationEvaluator</span><br><span class="line">from pyspark.ml <span class="keyword">import</span> Pipeline</span><br><span class="line">from pyspark.ml.feature <span class="keyword">import</span> IndexToString,StringIndexer,VectorIndexer,HashinTF,Tokenizer</span><br><span class="line">from pyspark.ml.classification <span class="keyword">import</span> LogisticRegression,\</span><br><span class="line">LogisticRegressionModel,BinaryLogisticRegressionSummary,LogisticRegression</span><br><span class="line">def f(x):</span><br><span class="line">	rel = &#123;&#125;</span><br><span class="line">	rel[<span class="string">&#x27;features&#x27;</span>]=Vectors.\</span><br><span class="line">	dense(<span class="built_in">float</span>(x[<span class="number">0</span>]),<span class="built_in">float</span>(x[<span class="number">1</span>]),<span class="built_in">float</span>(x[<span class="number">2</span>]),<span class="built_in">float</span>(x[<span class="number">3</span>]))</span><br><span class="line">	rel[<span class="string">&#x27;label&#x27;</span>] = <span class="built_in">str</span>(x[<span class="number">4</span>])</span><br><span class="line">	<span class="keyword">return</span> rel</span><br><span class="line"></span><br><span class="line">data =spark.sparkContext.\</span><br><span class="line">textFile(<span class="string">&#x27;&#x27;</span>file:<span class="comment">///usr/local/spark/iris.txt&quot;).\</span></span><br><span class="line"><span class="built_in">map</span>(lambda <span class="built_in">line</span>:<span class="built_in">line</span>.<span class="built_in">split</span>(<span class="string">&#x27;,&#x27;</span>)).\</span><br><span class="line"><span class="built_in">map</span>(lambda p:Row(**f(p))).\</span><br><span class="line">toDF()</span><br><span class="line">data.show()</span><br><span class="line"></span><br><span class="line">labelIndexer = StringIndexer().\</span><br><span class="line">setInputCol(<span class="string">&quot;label&quot;</span>).\</span><br><span class="line">setOutputCol(<span class="string">&quot;indexedLabel&quot;</span>).\</span><br><span class="line">fit(data)</span><br><span class="line">featureIndexer = VectorIndexer().\</span><br><span class="line">setInputCol(<span class="string">&quot;features&quot;</span>).\</span><br><span class="line">setOutputCol(<span class="string">&quot;indexedFeatures&quot;</span>).\</span><br><span class="line">fit(data)</span><br><span class="line"></span><br><span class="line">lr =LogisticRegression().\</span><br><span class="line">setLabelCol(<span class="string">&quot;indexedLabel&quot;</span>).\</span><br><span class="line">setFeaturesCol(<span class="string">&quot;indexedFeatures&quot;</span>).\</span><br><span class="line">setMaxIter(<span class="number">100</span>).\</span><br><span class="line">setRegParam(<span class="number">0.3</span>).\</span><br><span class="line">setElasticNetParam(<span class="number">0.8</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;LogisticRegression parameters:\n&quot;</span> + lr.explainParams())</span><br><span class="line"></span><br><span class="line">labelConverter = IndexToString().\</span><br><span class="line">setInputCol(<span class="string">&quot;predicition&quot;</span>).\</span><br><span class="line">setOutputCol(<span class="string">&quot;predictedLabel&quot;</span>).\</span><br><span class="line">setLabels(labelIndexer.labels)</span><br><span class="line"># pipeline是个评估器</span><br><span class="line">lrPipeline = Pipeline().\</span><br><span class="line">setStages([labelIndexer,featureIndexer,lr,labelConverter])</span><br><span class="line"></span><br><span class="line">trainingData,testData = data.randomSplit([<span class="number">0.7</span>,<span class="number">0.3</span>])</span><br><span class="line">lrPipelineModel = lrPipeline.fit(trainingData)</span><br><span class="line">lrPredictions = lrPipelineModel.transform(testData)</span><br><span class="line"></span><br><span class="line">preRel = lrPredictions.select(\</span><br><span class="line"><span class="string">&quot;predictedLabel&quot;</span>,\</span><br><span class="line"><span class="string">&quot;label&quot;</span>,\</span><br><span class="line"><span class="string">&quot;features&quot;</span>,\</span><br><span class="line"><span class="string">&quot;probability&quot;</span>).\</span><br><span class="line">collect()</span><br><span class="line"><span class="keyword">for</span> item in preRel:</span><br><span class="line">	<span class="built_in">print</span>(<span class="built_in">str</span>(item[<span class="string">&#x27;label&#x27;</span>])+<span class="string">&#x27;,&#x27;</span>+\</span><br><span class="line">	<span class="built_in">str</span>(item[<span class="string">&#x27;features&#x27;</span>])+<span class="string">&#x27;--&gt;prob=&#x27;</span>+\</span><br><span class="line">	<span class="built_in">str</span>(item[<span class="string">&#x27;probability&#x27;</span>])+<span class="string">&#x27;,predictedLabel&#x27;</span>+\</span><br><span class="line">	<span class="built_in">str</span>(item[<span class="string">&#x27;predictedLabel&#x27;</span>]))</span><br><span class="line">	</span><br><span class="line">evaluator = MulticlassClassificationEvaluator().\</span><br><span class="line">setLabelCol(<span class="string">&quot;indexedLabel&quot;</span>).\</span><br><span class="line">setPredictionCol(<span class="string">&quot;predicition&quot;</span>)</span><br><span class="line">lrAccuracy = evaluator.evaluate(lrPredictions)</span><br><span class="line"></span><br><span class="line">lrModel = lrPipelineModel.stages[<span class="number">2</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Coefficients:\n&quot;</span>+<span class="built_in">str</span>(lrModel.coefficientMatrix)+\</span><br><span class="line"><span class="string">&quot;\n Intercept:&quot;</span>+<span class="built_in">str</span>(lrModel.interceptVector)+\</span><br><span class="line"><span class="string">&quot;\n numClasses:&quot;</span>+<span class="built_in">str</span>(lrModel.numClasses)+\</span><br><span class="line"><span class="string">&quot;\n numFeatures:&quot;</span>+<span class="built_in">str</span>(lrModel.numFeatures))</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>决策树分类器</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.classification <span class="keyword">import</span> DecisionTreeClassificationModel</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.classification <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> pyspark.ml <span class="keyword">import</span> Pipeline,PipelineModel</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.evaluation <span class="keyword">import</span> MulticlassClassificationEvaluator</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.linalg <span class="keyword">import</span> Vector,Vectors</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> Row</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.feature <span class="keyword">import</span> IndexToString,StringIndexer,VectorIndexer</span><br><span class="line"></span><br><span class="line">def f(x):</span><br><span class="line">	rel = &#123;&#125;</span><br><span class="line">	rel[<span class="string">&#x27;features&#x27;</span>]=Vectors. <span class="string">\</span></span><br><span class="line">	dense(float(x[<span class="number">0</span>]),float(x[<span class="number">1</span>]),float(x[<span class="number">2</span>]),float(x[<span class="number">3</span>]))</span><br><span class="line">	rel[<span class="string">&#x27;label&#x27;</span>] = str(x[<span class="number">4</span>])</span><br><span class="line">	<span class="keyword">return</span> rel</span><br><span class="line">data = spark.sparkContext. <span class="string">\</span></span><br><span class="line">textFile(<span class="string">&quot;file:///usr/local/spark/iris.txt&quot;</span>). <span class="string">\</span></span><br><span class="line"><span class="keyword">map</span>(lambda line: line.split(<span class="string">&#x27;,&#x27;</span>)). <span class="string">\</span></span><br><span class="line"><span class="keyword">map</span>(lambda p: Row(**f(p))). <span class="string">\</span></span><br><span class="line">toDF()</span><br><span class="line"></span><br><span class="line">labelIndexer = StringIndexer(). <span class="string">\</span></span><br><span class="line">setInputCol(<span class="string">&quot;label&quot;</span>). <span class="string">\</span></span><br><span class="line">setOutputCol(<span class="string">&quot;indexedLabel&quot;</span>). <span class="string">\</span></span><br><span class="line">fit(data)</span><br><span class="line">featureIndexer = VectorIndexer(). <span class="string">\</span></span><br><span class="line">setInputCol(<span class="string">&quot;features&quot;</span>). <span class="string">\</span></span><br><span class="line">setOutputCol(<span class="string">&quot;indexedFeatures&quot;</span>). <span class="string">\</span></span><br><span class="line">setMaxCategories(<span class="number">4</span>). <span class="string">\</span></span><br><span class="line">fit(data)</span><br><span class="line">labelConverter = IndexToString(). <span class="string">\</span></span><br><span class="line">setInputCol(<span class="string">&quot;prediction&quot;</span>). <span class="string">\</span></span><br><span class="line">setOutputCol(<span class="string">&quot;predictedLabel&quot;</span>). <span class="string">\</span></span><br><span class="line">setLabels(labelIndexer.labels)</span><br><span class="line">trainingData, testData = data.randomSplit([<span class="number">0.7</span>, <span class="number">0.3</span>])</span><br><span class="line"></span><br><span class="line">dtClassifier = DecisionTreeClassifier(). <span class="string">\</span></span><br><span class="line">setLabelCol(<span class="string">&quot;indexedLabel&quot;</span>). <span class="string">\</span></span><br><span class="line">setFeaturesCol(<span class="string">&quot;indexedFeatures&quot;</span>)</span><br><span class="line"></span><br><span class="line">dtPipeline = Pipeline(). <span class="string">\</span></span><br><span class="line">setStages([labelIndexer, featureIndexer, dtClassifier, labelConverter])</span><br><span class="line">dtPipelineModel = dtPipeline.fit(trainingData)</span><br><span class="line">dtPredictions = dtPipelineModel.transform(testData)</span><br><span class="line">dtPredictions.select(<span class="string">&quot;predictedLabel&quot;</span>, <span class="string">&quot;label&quot;</span>, <span class="string">&quot;features&quot;</span>).show(<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">evaluator = MulticlassClassificationEvaluator().<span class="string">\</span></span><br><span class="line">setLabelCol(<span class="string">&quot;indexedLabel&quot;</span>).<span class="string">\</span></span><br><span class="line">setPredictionCol(<span class="string">&quot;predicition&quot;</span>)</span><br><span class="line">dtAccuracy = evaluator.evaluate(dtPredictions)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以通过调用DecisionTreeClassificationModel的toDebugString方法， 查看训练的决策树模型结构 。</span></span><br><span class="line">treeModelClassifier = dtPipelineModel.stages[<span class="number">2</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Learned classification tree model:\n&quot;</span> + <span class="string">\</span></span><br><span class="line">str(treeModelClassifier.toDebugString))</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pyspark/" rel="tag"># pyspark</a>
+              <a href="/tags/MLlib/" rel="tag"># MLlib</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/07/pyspark-Spark-SQL/" rel="prev" title="pyspark-Spark SQL">
+                  <i class="fa fa-chevron-left"></i> pyspark-Spark SQL
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95python%E7%89%88-%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9F%A5%E6%89%BE/" rel="next" title="数据结构与算法python版 - 排序与查找">
+                  数据结构与算法python版 - 排序与查找 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dawn Zou</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</body>
+</html>

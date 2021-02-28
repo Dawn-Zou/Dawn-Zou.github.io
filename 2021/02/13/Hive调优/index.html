@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="Hive调优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive&#x2F;spark调优">
+<meta property="og:url" content="http://example.com/2021/02/13/Hive%E8%B0%83%E4%BC%98/index.html">
+<meta property="og:site_name" content="Dawn Zou&#39;s Blog">
+<meta property="og:description" content="Hive调优">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-13T05:27:51.000Z">
+<meta property="article:modified_time" content="2021-02-13T05:32:00.000Z">
+<meta property="article:author" content="Dawn Zou">
+<meta property="article:tag" content="Hive">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/02/13/Hive%E8%B0%83%E4%BC%98/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Hive/spark调优 | Dawn Zou's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Dawn Zou's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A7%E7%94%9F%E5%A4%A7%E9%87%8F%E5%B0%8F%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">产生大量小文件的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E6%95%B4%E6%95%B0%E6%8D%AE%E5%9D%97%E5%A4%A7%E5%B0%8F%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">2.</span> <span class="nav-text">调整数据块大小对性能的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E6%8F%90%E5%8D%87"><span class="nav-number">3.</span> <span class="nav-text">不同数据格式对性能的提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A1%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">4.</span> <span class="nav-text">不同的表的设计对性能的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%94%B9%E5%86%99SQL%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%AF%B9%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B9%B2%E9%A2%84"><span class="nav-number">5.</span> <span class="nav-text">通过改写SQL，实现对计算引擎执行过程的干预</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87SQL-hint%E8%AF%AD%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%AF%B9%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B9%B2%E9%A2%84"><span class="nav-number">6.</span> <span class="nav-text">通过SQL-hint语法，实现对计算引擎执行过程的干预</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E6%94%BE%E7%9A%84%E4%B8%80%E4%BA%9B%E9%85%8D%E7%BD%AE%E5%BC%80%E5%85%B3%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%AF%B9%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E7%9A%84%E5%B9%B2%E9%A2%84%E3%80%82"><span class="nav-number">7.</span> <span class="nav-text">通过数据库开放的一些配置开关，实现对计算引擎的干预。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83"><span class="nav-number">8.</span> <span class="nav-text">开发规范</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dawn Zou"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Dawn Zou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dawn-Zou" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dawn-Zou" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/13/Hive%E8%B0%83%E4%BC%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dawn Zou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dawn Zou's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive/spark调优
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-02-13 13:27:51 / Modified: 13:32:00" itemprop="dateCreated datePublished" datetime="2021-02-13T13:27:51+08:00">2021-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/work-related/" itemprop="url" rel="index"><span itemprop="name">work-related</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">Hive调优</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="产生大量小文件的问题"><a href="#产生大量小文件的问题" class="headerlink" title="产生大量小文件的问题"></a>产生大量小文件的问题</h2><p>原因：</p>
+<ol>
+<li>数据源本身就是就含大量小文件</li>
+<li>动态分区插入数据,没有Shuffle的情况下,输入端有多少个逻辑分片,对应的HadoopRDD就会产生多少个HadoopPartition,每个Partition对应于Spark作业的Task（个数为M）,分区数为N.最好的情况就是（M=N） &amp;&amp; （M中的数据也是根据N来预先打散的）,那就刚好写N个文件；最差的情况下,每个Task中都有各个分区的记录,那文件数最终文件数将达到M * N个.这种情况下是极易产生小文件的</li>
+</ol>
+<ul>
+<li>Spark如何控制文件你输出数量？<br>用coalesce或者repartition,num=(1.0*(df.count())/7000000).ceil.toInt</li>
+<li>Spark让输出文件大小均匀？<br>在sparksql的查询最后加上distribute by rand()<br>distribute by是控制在map端如何拆分数据给reduce端的,hive会根据distribute by后面列,对应reduce的个数进行分发,默认是采用hash算法.<br>rand()方法会生成一个[0,1]之间的随机数,通过随机数进行数据的划分,因为每次都随机的,所以每个reducer上的数据会很均匀<br>补充：<br>文件数是spark.sql.shuffle.partitions * N,因为rand函数一般会把数据打散的非常均匀.当spark.sql.shuffle.partitions设置过大时,小文件问题就产生了；当spark.sql.shuffle.partitions设置过小时,任务的并行度就下降了,性能随之受到影响.<br>根据分区字段进行shuffle,但是这种情况下也容易出现数据倾斜的问题.<br>将两者结合：在之前的sql上加上distribute by ss_sold_date_sk,cast(rand() * 5 as int), 这个类似于我们处理数据倾斜问题时候给字段加上后缀的形式</li>
+</ul>
+<h2 id="调整数据块大小对性能的影响"><a href="#调整数据块大小对性能的影响" class="headerlink" title="调整数据块大小对性能的影响"></a>调整数据块大小对性能的影响</h2><ul>
+<li>Map读取大文件（总体相同,数据分布不均）与Map读取普通文件<br>读大文件需要网络传输<br>在不同环境下,执行结果有差异：<br>比如当集群的规模较小,整个集群的内网带宽资源充裕的情况下,因网络传输带来的时间损耗和其他原因（例如,hdfs的namenode节点资源紧张,定位查找更多的文件需要耗费更多时间等）相比所造成的时间延迟可能还少的时候,读取大文件的执行速度可能会比读取普通文件稍快.</li>
+</ul>
+<h2 id="不同数据格式对性能的提升"><a href="#不同数据格式对性能的提升" class="headerlink" title="不同数据格式对性能的提升"></a>不同数据格式对性能的提升</h2><p>Hive提供的格式有TEXT、SequenceFile、RCFile、ORC和Parquet等。<br>SequenceFile是一个二进制key/value对结构的平面文件，在早期的Hadoop平台上被广泛用于MapReduce输出/输出格式，以及作为数据存储格式。<br>Parquet 是一种列式数据存储格式，可以兼容多种计算引擎，如MapRedcue 和Spark等，对多层嵌套的数据结构提供了良好的性能支持，是目前Hive 生产环境中数据存储的主流选择之一。<br>ORC（Optimized Row Columnar）优化是对RCFile的一种优化，它提供了一种高效的方式来存储Hive数据，同时也能够提高Hive的读取、写入和处理数据的性能，能够兼容多种计算引擎。<br>事实上，在实际的生产环境中，ORC已经成为了Hive在数据存储上的主流选择之一。</p>
+<h2 id="不同的表的设计对性能的影响"><a href="#不同的表的设计对性能的影响" class="headerlink" title="不同的表的设计对性能的影响"></a>不同的表的设计对性能的影响</h2><ul>
+<li>分桶<br>每一个表（table）或者分区，Hive可以进一步组织成桶。也就是说，桶是更为细粒度的数据范围划分。<br>分桶的原理是对分桶列取Hash 值（Hive 中使用hash 函数），再用该Hash值模桶数（Hive中使用pmod函数），用Hive的函数可以表达为pmod(hash分桶列，桶数)。<br>分桶不会改变原有表/分区目录的组织方式，只是更改了数据在文件中的分布<br>分区提供了一个隔离数据和优化查询的便利的方式.但是当分区的数量过多时，会产生过多的小分区,这样会给namenode带来较大的压力.分桶试讲数据集分解成更容易管理的若干部分的另一个技术.</li>
+<li>优势<br>  1.分桶加快了join查询的速度.<br>  2.使取样(sampling)更加的高效<br><code>select * from t_bucket tablesample(bucket x out of y on xx);</code></li>
+</ul>
+<h2 id="通过改写SQL，实现对计算引擎执行过程的干预"><a href="#通过改写SQL，实现对计算引擎执行过程的干预" class="headerlink" title="通过改写SQL，实现对计算引擎执行过程的干预"></a>通过改写SQL，实现对计算引擎执行过程的干预</h2><ol>
+<li>尽可能使用SQL 自带的高级命令做操作。例如，在多维统计分析中使用cube、grouping set和rollup等命令去替代多个SQL子句的union all。</li>
+<li>分解count(distinct)的SQL优化。（distinct会将b列所有的数据保存到内存中，形成一个类似hash的结构，速度是十分的块；但是在大数据背景下，因为b列所有的值都会形成以key值，极有可能发生OOM）</li>
+</ol>
+<h2 id="通过SQL-hint语法，实现对计算引擎执行过程的干预"><a href="#通过SQL-hint语法，实现对计算引擎执行过程的干预" class="headerlink" title="通过SQL-hint语法，实现对计算引擎执行过程的干预"></a>通过SQL-hint语法，实现对计算引擎执行过程的干预</h2><ol>
+<li>使用MapJoin Hint的SQL<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># -MAPJOIN() 括号中指定的是数据量较小的表，表示在Map阶段完成a,b表的连接</span><br><span class="line"><span class="keyword">SELECT</span> <span class="comment">/* + MAPJOIN(b) */</span> a.<span class="keyword">key</span>,b.<span class="keyword">value</span> <span class="keyword">FROM</span> a <span class="keyword">JOIN</span> b <span class="keyword">on</span> a.<span class="keyword">key</span> = b.<span class="keyword">key</span></span><br></pre></td></tr></table></figure></li>
+<li>STREAMTABLE(),括号中指定的是数据量较大的表，<br>默认情况下在reduce阶段进行连接，hive把左表中的数据放在缓存中，右表的数据作为流</li>
+</ol>
+<h2 id="通过数据库开放的一些配置开关，实现对计算引擎的干预。"><a href="#通过数据库开放的一些配置开关，实现对计算引擎的干预。" class="headerlink" title="通过数据库开放的一些配置开关，实现对计算引擎的干预。"></a>通过数据库开放的一些配置开关，实现对计算引擎的干预。</h2><ol>
+<li>开启向量化查询开关<br>开启hive.vectorized.execution.enabled操作，默认是关闭状态，将一个普通的查询转化为向量化查询执行是一个Hive 特性。它大大减少了扫描、过滤器、聚合和连接等典型查询操作的CPU 使用。</li>
+</ol>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> hive.vectorized.execution.enabled <span class="comment">=true</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>开启并行执行。 <figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> hive.<span class="built_in">exec</span>.parallel=<span class="literal">true</span>; <span class="comment">//打开任务并行执行</span></span><br><span class="line"><span class="built_in">set</span> hive.<span class="built_in">exec</span>.parallel.thread.number=<span class="number">16</span>; <span class="comment">//同一个 sql 允许最大并行度，默认为 8</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="开发规范"><a href="#开发规范" class="headerlink" title="开发规范"></a>开发规范</h2><ul>
+<li>尽可能使用SQL 自带的高级命令做操作。例如，在多维统计分析中使用cube、grouping set和rollup等命令去替代多个SQL子句的union all。</li>
+<li>使用set命令，进行配置属性的更改，要有注释。</li>
+<li>代码里面不允许包含对表/分区/列的DDL语句，除了新增和删除分区。</li>
+<li>Hive SQL 更加适合处理多条数据组合的数据集，不适合处理单条数据，且单条数据之间存在顺序依赖等逻辑关系。例如，有A、B、C 3行数据，当A符合某种条件才能处理B行时，只有A、B符合某种条件，才能处理C行。</li>
+<li>保持一个查询语句所处理的表类型单一。例如，一个SQL语句中的表都是ORC类型的表，或者都是Parquet表。</li>
+<li>关注NULL值的数据处理。</li>
+<li>SQL表连接的条件列和查询的过滤列最好要有分区列和分桶列。</li>
+<li>存在多层嵌套，内层嵌套表的过滤条件不要写到外层 </li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hive/" rel="tag"># Hive</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/12/Tensorflow%E5%85%A5%E9%97%A8-%E5%AE%98%E6%96%B9/" rel="prev" title="Tensorflow入门 - 官方">
+                  <i class="fa fa-chevron-left"></i> Tensorflow入门 - 官方
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95python%E7%89%88-%E9%80%92%E5%BD%92%E3%80%81%E5%88%86%E6%B2%BB%E3%80%81%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="next" title="数据结构与算法python版 - 递归、分治、动态规划">
+                  数据结构与算法python版 - 递归、分治、动态规划 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dawn Zou</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</body>
+</html>

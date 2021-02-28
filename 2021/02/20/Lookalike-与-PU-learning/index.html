@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="Lookalike 与 PU-learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lookalike 与 PU-learning">
+<meta property="og:url" content="http://example.com/2021/02/20/Lookalike-%E4%B8%8E-PU-learning/index.html">
+<meta property="og:site_name" content="Dawn Zou&#39;s Blog">
+<meta property="og:description" content="Lookalike 与 PU-learning">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-20T08:43:47.000Z">
+<meta property="article:modified_time" content="2021-02-20T09:33:00.000Z">
+<meta property="article:author" content="Dawn Zou">
+<meta property="article:tag" content="Lookalike">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/02/20/Lookalike-%E4%B8%8E-PU-learning/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Lookalike 与 PU-learning | Dawn Zou's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Dawn Zou's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.</span> <span class="nav-text">显示定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E5%AE%9A%E4%BD%8D"><span class="nav-number">2.</span> <span class="nav-text">隐式定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PU-learning"><span class="nav-number">3.</span> <span class="nav-text">PU-learning</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dawn Zou"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Dawn Zou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dawn-Zou" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dawn-Zou" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/20/Lookalike-%E4%B8%8E-PU-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dawn Zou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dawn Zou's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lookalike 与 PU-learning
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-02-20 16:43:47 / Modified: 17:33:00" itemprop="dateCreated datePublished" datetime="2021-02-20T16:43:47+08:00">2021-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/work-related/" itemprop="url" rel="index"><span itemprop="name">work-related</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">Lookalike 与 PU-learning</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ichdata.com/lookalike.html">https://www.ichdata.com/lookalike.html</a><br><a target="_blank" rel="noopener" href="https://www.ichdata.com/ad-tech/ca">https://www.ichdata.com/ad-tech/ca</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42435966">https://zhuanlan.zhihu.com/p/42435966</a><br><a target="_blank" rel="noopener" href="https://yan_liu.gitbooks.io/algorithm/content/lookalikepu-learning.html">https://yan_liu.gitbooks.io/algorithm/content/lookalikepu-learning.html</a></p>
+</blockquote>
+<p>扩大投放人群<br>基于现有人群，通过数据分析，找到这一批与现有人群最类似，最有可能转化的人群去扩大投放。<br>方法：</p>
+<ol>
+<li>显示定位</li>
+<li>隐式定位</li>
+</ol>
+<h2 id="显示定位"><a href="#显示定位" class="headerlink" title="显示定位"></a>显示定位</h2><p>显示定位其实就是根据规则或标签进行人群选择、<br>标签本质是利用用户画像/标签体系，基于种子用户的标签，利用相同标签的方式找目标人群。<br>这是最简单、高效、粗暴的一种方式。这种适合收集有大量用户数据能构建完整用户画像的公司做。<br>系统会根据种子用户的标签与腾讯用户标签做匹配，会从上百万个维度对种子人群进行分析，从中筛选出最具代表性的共有特征。根据这些特征再从全量活跃用户中筛选出另一批与种子人群最相似的用户。</p>
+<h2 id="隐式定位"><a href="#隐式定位" class="headerlink" title="隐式定位"></a>隐式定位</h2><ol>
+<li>基于相似度模型</li>
+<li>基于标签/用户协同过滤</li>
+<li>基于分类模型<br>将look-alike看成是分类问题，很多的分类算法都可能适用。</li>
+</ol>
+<p>1)LR算法<br>值的范围在0到1之间，通过阈值就可以判断是否符合目标用户<br>这种方法的优势在于种子用户的所有特征都使用到，易于解释。<br>随着广告的增加，索引存储、离线训练和预测的机器会难以支撑。<br>2)RF模型<br>随机森林模型的实验效果并不理想，在相同的样本和特征上Precision和AUC指标均比LR低，且特征重要性结果只能到特征粒度不能到特征值粒度，因此不再使用。<br>3)PS-SMART算法<br>PS架构的GBDT算法模型，决策树弱分类器加上GBM算法，具有较强的非线性拟合能力，在应用中相比其它两种算法模型效果更好。因此选择PS-SMART作为最终的算法模型，并对损失函数、树的个数深度、正则系数进行调优。<br>4. 基于聚类<br>根据用户标签，采用层次聚类算法（如BIRCH或CURE算法）对人群进行聚类，再从中找出与种子人群相似的机会人群，再通过Top-N排序算法得到用户。<br>5. 基于社交关系<br>6. 基于图模型<br>A Sub-linear, Massive-scale Look-alike Audience Extension System<br>7. 基于Attention深度模型<br>RALM算法：全名Real-time Attention based Look-alike Model<br>8. 其它<br>Adobe的用的是TraitWeight algorithm，<br>百度用深度神经网络相似排序模型<br>由于性能的因素，部分厂家会使用两级模型，就是第一级别是基于标签的，因为基于标签的方式简单，能够做初步筛选，其实就是做粗排，第二级别的是基于算法的，做精选。</p>
+<h2 id="PU-learning"><a href="#PU-learning" class="headerlink" title="PU-learning"></a>PU-learning</h2><p>PU learning (positive unlabeled learning)是半监督学习的一个重要分支，其中唯一可用的标记数据是正样本（喜欢的物品）。</p>
+<ol>
+<li>直接利用标准分类方法</li>
+<li>PU bagging<br>A bagging SVM to learn from positive and unlabeled examples<br>a)、通过将所有正样本和未标记样本进行随机组合来创建训练集。<br>b)、利用这个“bootstrap”样本来构建分类器，分别将正样本和未标记样本视为positive和negative。<br>c)、将分类器应用于不在训练集中的未标记样本 - OOB（“out of bag”）- 并记录其分数。<br>d)、重复上述三个步骤，最后为每个样本的分数为OOB分数的平均值。</li>
+<li>Two-step approaches<br>An Evaluation of Two-Step Techniques for Positive-Unlabeled Learning in Text Classification<br>a)、识别可以百分之百标记为negative的未标记样本子集（上述论文的作者称这些样本为“reliable negatives”。）<br>b)、使用正负样本来训练标准分类器并将其应用于剩余的未标记样本。<br>通常，会将第二步的结果返回到第一步并重复上述步骤。</li>
+<li>Positive unlabeled random forest<br>Towards Positive Unlabeled Learning for Parallel Data Mining: A Random Forest Framework </li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Lookalike/" rel="tag"># Lookalike</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/13/spark%E5%AE%9E%E7%8E%B0PageRank/" rel="prev" title="spark实现PageRank">
+                  <i class="fa fa-chevron-left"></i> spark实现PageRank
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/22/nlp%E7%9B%B8%E5%85%B3%E7%BB%8F%E5%85%B8%E8%AE%BA%E6%96%87/" rel="next" title="nlp相关经典论文">
+                  nlp相关经典论文 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dawn Zou</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</body>
+</html>
