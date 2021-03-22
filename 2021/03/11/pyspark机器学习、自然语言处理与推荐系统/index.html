@@ -23,17 +23,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dawn Zou&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/%E8%90%A5%E9%94%80/index.html">
+<meta name="description" content="pyspark机器学习、自然语言处理与推荐系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pyspark机器学习、自然语言处理与推荐系统">
+<meta property="og:url" content="http://example.com/2021/03/11/pyspark%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E3%80%81%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E4%B8%8E%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Dawn Zou&#39;s Blog">
+<meta property="og:description" content="pyspark机器学习、自然语言处理与推荐系统">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-11T05:10:30.000Z">
+<meta property="article:modified_time" content="2021-03-11T10:32:00.000Z">
 <meta property="article:author" content="Dawn Zou">
-<meta property="article:tag" content="Dawn zou, blog">
+<meta property="article:tag" content="pyspark">
+<meta property="article:tag" content="udf">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/tags/%E8%90%A5%E9%94%80/">
+<link rel="canonical" href="http://example.com/2021/03/11/pyspark%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E3%80%81%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E4%B8%8E%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">
 
 
 <script class="page-configurations">
@@ -41,11 +46,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
-<title>Tag: 营销 | Dawn Zou's Blog</title>
+<title>pyspark机器学习、自然语言处理与推荐系统 | Dawn Zou's Blog</title>
   
 
 
@@ -169,7 +174,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -182,6 +187,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">机器学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text">半监督学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.2.</span> <span class="nav-text">强化学习</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">数据处理</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -241,50 +247,101 @@
 </noscript>
 
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h2 class="collection-header">营销
-          <small>Tag</small>
-        </h2>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/11/pyspark%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E3%80%81%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E4%B8%8E%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dawn Zou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dawn Zou's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pyspark机器学习、自然语言处理与推荐系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+
+      <time title="Created: 2021-03-11 13:10:30 / Modified: 18:32:00" itemprop="dateCreated datePublished" datetime="2021-03-11T13:10:30+08:00">2021-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/work-related/" itemprop="url" rel="index"><span itemprop="name">work-related</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">pyspark机器学习、自然语言处理与推荐系统</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>RDD会使用最后一个时点的数据流创建一个新的RDD,并且就算出现任何错误,也总是拥有重构的能力.<br>Spark Core 负责任务管理、I/O操作、容错以及内存管理等.</p>
+<h1 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h1><p>无监督：<br>聚类算法<br>维度降低技术<br>主题模型<br>关联规则挖掘</p>
+<h2 id="半监督学习"><a href="#半监督学习" class="headerlink" title="半监督学习"></a>半监督学习</h2><h2 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h2><p>强化学习是依托一套奖励系统来运行的，主要基于智能体为变更状态而执行某些操作，从而尝试最大化奖励来进行决策。<br>（智能体、操作、奖励、环境、状态)</p>
+<h1 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h1><p>加载和读取数据</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.<span class="keyword">sql</span> <span class="keyword">import</span> SparkSession</span><br><span class="line">spark=SparkSession.builder.appName(<span class="string">&#x27;data_processing&#x27;</span>).getOrCreate()</span><br><span class="line"># 自行推断数据集中的数据类型</span><br><span class="line">df=spark.<span class="keyword">read</span>.csv(<span class="string">&#x27;sample_data.csv&#x27;</span>,inferSchema=<span class="keyword">True</span>,<span class="keyword">header</span>=<span class="keyword">True</span>)</span><br><span class="line">print((df,ciybt),(len*=(df.<span class="keyword">columns</span>))</span><br><span class="line">df.printSchema()</span><br><span class="line">df.<span class="keyword">show</span>(<span class="number">5</span>)</span><br><span class="line">df.<span class="keyword">select</span>(<span class="string">&#x27;age&#x27;</span>,<span class="string">&#x27;mobile&#x27;</span>).<span class="keyword">show</span>(<span class="number">5</span>)</span><br><span class="line">df.describe().<span class="keyword">show</span>()</span><br><span class="line"># 添加一个新列</span><br><span class="line">df.withColumn(&quot;age_after_10yrs&quot;,(df[&quot;age&quot;]+<span class="number">10</span>)).<span class="keyword">show</span>(<span class="number">10</span>,Falwe)</span><br><span class="line"><span class="keyword">from</span> pyspark.<span class="keyword">sql</span>.<span class="keyword">types</span> <span class="keyword">import</span> StringType,DoubleType</span><br><span class="line">df.withColumn(<span class="string">&#x27;age_double&#x27;</span>,df[<span class="string">&#x27;age&#x27;</span>].cast(DoubleType())).<span class="keyword">show</span>(<span class="number">10</span>,<span class="keyword">False</span>)</span><br><span class="line">df.<span class="keyword">filter</span>(df[<span class="string">&#x27;mobile&#x27;</span>]==<span class="string">&#x27;Vivo&#x27;</span>).<span class="keyword">show</span>()</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-03T22:45:59+08:00"
-              content="2021-03-03">
-          03-03
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/03/03/%E9%98%BF%E9%87%8C%E4%B8%89%E5%A4%A7%E8%90%A5%E9%94%80%E6%A8%A1%E5%9E%8B/" itemprop="url">
-            <span itemprop="name">阿里三大营销模型</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pyspark/" rel="tag"># pyspark</a>
+              <a href="/tags/udf/" rel="tag"># udf</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/03/%E9%98%BF%E9%87%8C%E4%B8%89%E5%A4%A7%E8%90%A5%E9%94%80%E6%A8%A1%E5%9E%8B/" rel="prev" title="阿里三大营销模型">
+                  <i class="fa fa-chevron-left"></i> 阿里三大营销模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 
 <script>
